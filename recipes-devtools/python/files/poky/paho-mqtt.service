@@ -1,0 +1,13 @@
+[Unit]
+Description=Paho MQTT Client
+After=network-online.target
+
+[Service]
+ExecStartPre=echo "MQTT Starting"
+ExecStart=python3 /scripts/mqtt-client.py
+Restart=always
+RestartSec=1s
+
+[Install]
+WantedBy=multi-user.target
+Alias=paho-mqtt
