@@ -4,7 +4,7 @@ After=network-online.target
 
 [Service]
 ExecStartPre=echo "MQTT Starting"
-ExecStart=python3 /scripts/mqtt-client.py
+ExecStart=/usr/bin/mqtt-client.py
 Restart=always
 RestartSec=1s
 
