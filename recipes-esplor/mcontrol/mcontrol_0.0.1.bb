@@ -13,8 +13,7 @@ FILES:${PN} += "${systemd_system_unitdir}/paho-mqtt.service ${bindir}/mqtt-clien
 
 SRC_URI = "file://mqtt-client.py file://paho-mqtt.service"
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 do_install() {
     install -d ${D}${systemd_system_unitdir}
