@@ -1,5 +1,5 @@
 [Unit]
-Description=Paho MQTT Client
+Description=Mcontrol Client
 After=network-online.target
 
 [Service]
@@ -10,4 +10,4 @@ RestartSec=1s
 
 [Install]
 WantedBy=multi-user.target
-Alias=paho-mqtt
+Alias=mcontrol_client
