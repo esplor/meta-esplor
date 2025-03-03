@@ -1,5 +1,5 @@
 SUMMARY = "Control system via mqtt"
-LICENSE = "CLOSED"
+LICENSE = "MIT"
 
 inherit systemd
 
@@ -16,8 +16,6 @@ SRC_URI = "file://mqtt-client.py file://mcontrol.service"
 S = "${WORKDIR}"
 
 do_install() {
-    install -d ${D}${systemd_system_unitdir}
     install -d ${D}${bindir}
-    install -m 0644 ${S}/mcontrol.service ${D}${systemd_system_unitdir}
     install -m 0700 ${S}/mqtt-client.py ${D}${bindir}
 }
