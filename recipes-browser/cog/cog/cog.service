@@ -1,0 +1,13 @@
+[Unit]
+Description=Cog WPE WebKit Kiosk Browser
+After=cog-url.service
+Wants=cog-url.service
+
+[Service]
+EnvironmentFile=-/run/cog/env
+ExecStart=/usr/bin/cog -P drm --platform-params="renderer=gles,rotation=3" ${COG_URL}
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
