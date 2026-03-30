@@ -1,11 +1,11 @@
 [Unit]
 Description=Cog WPE WebKit Kiosk Browser
-After=cog-url.service
-Wants=cog-url.service
+After=network-online.target cog-url.service
+Wants=network-online.target cog-url.service
 
 [Service]
 EnvironmentFile=-/run/cog/env
-ExecStart=/usr/bin/cog -P drm --platform-params="renderer=gles,rotation=3" ${COG_URL}
+ExecStart=/usr/bin/cog -P drm --platform-params="${COG_PLATFORM_PARAMS}" ${COG_URL}
 Restart=on-failure
 RestartSec=5s
 
