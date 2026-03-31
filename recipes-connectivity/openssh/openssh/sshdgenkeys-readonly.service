@@ -1,0 +1,13 @@
+[Unit]
+Description=Generate SSH host keys on data partition
+After=data.mount
+Requires=data.mount
+Before=sshd.service
+ConditionPathExists=!/data/ssh/ssh_host_ed25519_key
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'mkdir -p /data/ssh && ssh-keygen -t rsa -f /data/ssh/ssh_host_rsa_key -N "" && ssh-keygen -t ecdsa -f /data/ssh/ssh_host_ecdsa_key -N "" && ssh-keygen -t ed25519 -f /data/ssh/ssh_host_ed25519_key -N ""'
+
+[Install]
+WantedBy=multi-user.target

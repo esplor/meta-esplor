@@ -5,7 +5,7 @@ Wants=network-online.target cog-url.service
 
 [Service]
 EnvironmentFile=-/run/cog/env
-ExecStart=/usr/bin/cog -P drm --platform-params="${COG_PLATFORM_PARAMS}" ${COG_URL}
+ExecStart=/usr/bin/cog --doc-viewer --bg-color=${COG_BG} --webprocess-failure=restart --web-mem-limit=400 --net-mem-limit=100 -P drm --platform-params="${COG_PLATFORM_PARAMS}" ${COG_URL}
 Restart=on-failure
 RestartSec=5s
 

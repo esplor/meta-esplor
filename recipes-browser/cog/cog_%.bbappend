@@ -6,6 +6,9 @@ SRC_URI += " \
     file://cog-read-url.sh \
 "
 
+PACKAGECONFIG:append = " dbus"
+COG_DBUS_OWN_USER = "root"
+
 inherit systemd
 
 SYSTEMD_SERVICE:${PN} = "cog.service"
