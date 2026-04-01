@@ -1,0 +1,13 @@
+[Unit]
+Description=Cog WPE WebKit Kiosk Browser
+After=network-online.target cog-url.service time-sync.target
+Wants=network-online.target cog-url.service time-sync.target
+
+[Service]
+EnvironmentFile=-/run/cog/env
+ExecStart=/usr/bin/cog -C /etc/cog/cog.ini --doc-viewer --bg-color=${COG_BG} --webprocess-failure=restart --web-mem-limit=400 --net-mem-limit=100 -P drm --platform-params="${COG_PLATFORM_PARAMS}" ${COG_URL}
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

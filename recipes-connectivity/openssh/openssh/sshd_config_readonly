@@ -1,0 +1,4 @@
+# Host keys on persistent data partition for read-only rootfs
+HostKey /data/ssh/ssh_host_rsa_key
+HostKey /data/ssh/ssh_host_ecdsa_key
+HostKey /data/ssh/ssh_host_ed25519_key

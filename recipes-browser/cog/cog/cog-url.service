@@ -1,0 +1,9 @@
+[Unit]
+Description=Read COG_URL from kernel command line
+DefaultDependencies=no
+Before=cog.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/libexec/cog-read-url.sh

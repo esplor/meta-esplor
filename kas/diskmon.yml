@@ -12,3 +12,10 @@ local_conf_header:
         HALT,${SSTATE_DIR},100M,1K \
         HALT,/tmp,10M,1K"
 
+  # rm_work: delete recipe work dirs after build completes
+  # saves disk, reduces cache pressure on low-RAM systems
+  # sstate-cached recipes skip build entirely, so rm_work is a no-op for those
+  # exclude recipes you need to inspect/rebuild incrementally
+  # RM_WORK: |
+  #   INHERIT += "rm_work"
+  #   RM_WORK_EXCLUDE += ""
