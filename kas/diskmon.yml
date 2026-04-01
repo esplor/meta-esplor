@@ -16,6 +16,6 @@ local_conf_header:
   # saves disk, reduces cache pressure on low-RAM systems
   # sstate-cached recipes skip build entirely, so rm_work is a no-op for those
   # exclude recipes you need to inspect/rebuild incrementally
-  # RM_WORK: |
-  #   INHERIT += "rm_work"
-  #   RM_WORK_EXCLUDE += ""
+  RM_WORK: |
+    INHERIT += "rm_work"
+    RM_WORK_EXCLUDE += ""
