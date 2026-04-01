@@ -4,6 +4,7 @@ SRC_URI += " \
     file://cog.service \
     file://cog-url.service \
     file://cog-read-url.sh \
+    file://cog.ini \
 "
 
 PACKAGECONFIG:append = " dbus"
@@ -21,10 +22,14 @@ do_install:append() {
 
     install -d ${D}${libexecdir}
     install -m 0755 ${WORKDIR}/cog-read-url.sh ${D}${libexecdir}/cog-read-url.sh
+
+    install -d ${D}${sysconfdir}/cog
+    install -m 0644 ${WORKDIR}/cog.ini ${D}${sysconfdir}/cog/cog.ini
 }
 
 FILES:${PN} += " \
     ${systemd_system_unitdir}/cog.service \
     ${systemd_system_unitdir}/cog-url.service \
     ${libexecdir}/cog-read-url.sh \
+    ${sysconfdir}/cog/cog.ini \
 "

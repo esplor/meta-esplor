@@ -1,9 +1,9 @@
-# Remember to set PACKAGECONFIG:append:pn-systemd = " firstboot"
-
-apply_esplor_firstboot() {
-    install -d ${IMAGE_ROOTFS}/etc/credstore
-    printf 'Europe/Oslo' | install -m 0400 /dev/stdin ${IMAGE_ROOTFS}/etc/credstore/firstboot.timezone
-    printf 'no-latin1'   | install -m 0400 /dev/stdin ${IMAGE_ROOTFS}/etc/credstore/firstboot.keymap
+set_vconsole_keymap() {
+    echo 'KEYMAP=no-latin1' > ${IMAGE_ROOTFS}/etc/vconsole.conf
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "apply_esplor_firstboot;"
+ROOTFS_POSTPROCESS_COMMAND += "set_vconsole_keymap; create_data_mountpoint;"
+
+create_data_mountpoint() {
+    install -d ${IMAGE_ROOTFS}/data
+}
