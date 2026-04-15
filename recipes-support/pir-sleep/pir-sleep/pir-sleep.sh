@@ -29,15 +29,18 @@ use_cec() { [ "$PIR_SLEEP_MODE" = "cec" ] || [ "$PIR_SLEEP_MODE" = "both" ]; }
 use_ddc() { [ "$PIR_SLEEP_MODE" = "ddc" ] || [ "$PIR_SLEEP_MODE" = "both" ]; }
 
 standby() {
+    echo "standby: no motion for ${PIR_SLEEP_TIMEOUT}s (mode=$PIR_SLEEP_MODE)"
     use_cec && cec-ctl -d "$PIR_SLEEP_CEC_DEVICE" --standby >/dev/null 2>&1
     use_ddc && ddcutil $DDC_ARGS setvcp 0xD6 4 >/dev/null 2>&1
 }
 
 wakeup() {
+    echo "wake: motion detected (mode=$PIR_SLEEP_MODE)"
     use_cec && cec-ctl -d "$PIR_SLEEP_CEC_DEVICE" --image-view-on >/dev/null 2>&1
     use_ddc && ddcutil $DDC_ARGS setvcp 0xD6 1 >/dev/null 2>&1
 }
 
+echo "pir-sleep: gpio=$PIR_SLEEP_GPIOCHIP/$PIR_SLEEP_GPIO timeout=${PIR_SLEEP_TIMEOUT}s mode=$PIR_SLEEP_MODE"
 display_on=1
 
 # gpiomon v2 prints an event line on rising edge, and exits 0 after either
