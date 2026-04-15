@@ -1,0 +1,51 @@
+#!/bin/sh
+# display — control attached display via HDMI CEC and/or DDC/CI.
+# Reads mode/device config from env if set (e.g. when called by
+# pir-sleep.sh), otherwise from /etc/default/pir-sleep.
+
+if [ -z "$PIR_SLEEP_MODE" ]; then
+    [ -f /etc/default/pir-sleep ] && . /etc/default/pir-sleep || true
+fi
+: "${PIR_SLEEP_MODE:=both}"
+: "${PIR_SLEEP_CEC_DEVICE:=/dev/cec0}"
+: "${PIR_SLEEP_DDC_BUS:=}"
+
+DDC_ARGS=
+[ -n "$PIR_SLEEP_DDC_BUS" ] && DDC_ARGS="--bus $PIR_SLEEP_DDC_BUS"
+
+use_cec() { [ "$PIR_SLEEP_MODE" = "cec" ] || [ "$PIR_SLEEP_MODE" = "both" ]; }
+use_ddc() { [ "$PIR_SLEEP_MODE" = "ddc" ] || [ "$PIR_SLEEP_MODE" = "both" ]; }
+
+case "$1" in
+    on)
+        use_cec && cec-ctl -d "$PIR_SLEEP_CEC_DEVICE" --image-view-on >/dev/null 2>&1
+        use_ddc && ddcutil $DDC_ARGS setvcp 0xD6 1 >/dev/null 2>&1
+        ;;
+    standby)
+        # DDC VCP 0xD6=2: low-power standby, monitor LED shows yellow.
+        use_cec && cec-ctl -d "$PIR_SLEEP_CEC_DEVICE" --standby >/dev/null 2>&1
+        use_ddc && ddcutil $DDC_ARGS setvcp 0xD6 2 >/dev/null 2>&1
+        ;;
+    off)
+        # DDC VCP 0xD6=4: soft-off, LED goes dark. CEC has no "off"
+        # separate from standby, so it reuses --standby.
+        use_cec && cec-ctl -d "$PIR_SLEEP_CEC_DEVICE" --standby >/dev/null 2>&1
+        use_ddc && ddcutil $DDC_ARGS setvcp 0xD6 4 >/dev/null 2>&1
+        ;;
+    status)
+        use_ddc && ddcutil $DDC_ARGS getvcp 0xD6
+        ;;
+    *)
+        cat >&2 <<EOF
+usage: display {on|standby|off|status}
+
+    on       wake display (DDC VCP 0xD6=1, CEC --image-view-on)
+    standby  low-power standby, yellow LED (DDC VCP 0xD6=2, CEC --standby)
+    off      full soft-off, LED dark (DDC VCP 0xD6=4, CEC --standby)
+    status   show current DDC power mode
+
+Mode and device paths come from env if set, else /etc/default/pir-sleep.
+EOF
+        exit 1
+        ;;
+esac
