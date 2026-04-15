@@ -2,14 +2,14 @@
 # Monitor PIR sensor via libgpiod; blank/wake display via HDMI CEC and/or DDC/CI.
 # Configure via /etc/default/pir-sleep or kernel cmdline.
 
-PIR_SLEEP_GPIOCHIP=gpiochip0
-PIR_SLEEP_GPIO=12
-PIR_SLEEP_TIMEOUT=600
-PIR_SLEEP_MODE=both            # cec | ddc | both
-PIR_SLEEP_CEC_DEVICE=/dev/cec0
-PIR_SLEEP_DDC_BUS=
-
 [ -f /etc/default/pir-sleep ] && . /etc/default/pir-sleep || true
+
+: "${PIR_SLEEP_GPIOCHIP:=gpiochip0}"
+: "${PIR_SLEEP_GPIO:=18}"
+: "${PIR_SLEEP_TIMEOUT:=600}"
+: "${PIR_SLEEP_MODE:=both}"         # cec | ddc | both
+: "${PIR_SLEEP_CEC_DEVICE:=/dev/cec0}"
+: "${PIR_SLEEP_DDC_BUS:=}"
 
 for param in $(tr ' ' '\n' < /proc/cmdline); do
     case "$param" in
@@ -40,8 +40,14 @@ wakeup() {
 
 display_on=1
 
+# gpiomon v2 prints an event line on rising edge, and exits 0 after either
+# --idle-timeout firing or -n events. Detect which happened via stdout:
+# non-empty = motion, empty = inactivity.
 while true; do
-    if timeout "$PIR_SLEEP_TIMEOUT" gpiomon -r -n 1 -s "$PIR_SLEEP_GPIOCHIP" "$PIR_SLEEP_GPIO" >/dev/null 2>&1; then
+    result=$(gpiomon -c "$PIR_SLEEP_GPIOCHIP" -e rising -n 1 \
+                     --idle-timeout "${PIR_SLEEP_TIMEOUT}s" \
+                     -F "%e" "$PIR_SLEEP_GPIO" 2>/dev/null)
+    if [ -n "$result" ]; then
         if [ "$display_on" = "0" ]; then
             wakeup
             display_on=1
