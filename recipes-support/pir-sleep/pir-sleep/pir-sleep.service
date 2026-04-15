@@ -1,9 +1,9 @@
 [Unit]
-Description=CEC display sleep on PIR inactivity
+Description=PIR-driven display sleep (CEC/DDC)
 After=cog.service
 
 [Service]
-ExecStart=/usr/libexec/cec-sleep.sh
+ExecStart=/usr/libexec/pir-sleep.sh
 Restart=on-failure
 RestartSec=5s
 
