@@ -1,0 +1,12 @@
+[Unit]
+Description=Poll for vc4 GPU reset cascade
+After=systemd-journald.service
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=60s
+AccuracySec=5s
+Unit=cog-watchdog.service
+
+[Install]
+WantedBy=timers.target

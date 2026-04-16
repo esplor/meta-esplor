@@ -1,0 +1,6 @@
+[Unit]
+Description=Detect vc4 GPU reset cascade and force reboot
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/cog-watchdog.sh
