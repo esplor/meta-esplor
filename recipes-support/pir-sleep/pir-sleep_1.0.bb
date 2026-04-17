@@ -7,10 +7,9 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI = " \
     file://pir-sleep.sh \
     file://pir-sleep.service \
-    file://display \
 "
 
-RDEPENDS:${PN} = "libgpiod-tools ddcutil v4l-utils"
+RDEPENDS:${PN} = "display-helper libgpiod-tools"
 
 inherit systemd
 
@@ -21,15 +20,11 @@ do_install() {
     install -d ${D}${libexecdir}
     install -m 0755 ${WORKDIR}/pir-sleep.sh ${D}${libexecdir}/pir-sleep.sh
 
-    install -d ${D}${bindir}
-    install -m 0755 ${WORKDIR}/display ${D}${bindir}/display
-
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/pir-sleep.service ${D}${systemd_system_unitdir}/pir-sleep.service
 }
 
 FILES:${PN} = " \
     ${libexecdir}/pir-sleep.sh \
-    ${bindir}/display \
     ${systemd_system_unitdir}/pir-sleep.service \
 "
