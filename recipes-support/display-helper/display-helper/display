@@ -1,5 +1,5 @@
 #!/bin/sh
-# display — control attached display via HDMI CEC and/or DDC/CI.
+# display - control attached display via HDMI CEC and/or DDC/CI.
 # Reads mode/device config from env if set (e.g. when called by
 # pir-sleep.sh), otherwise from /etc/default/pir-sleep.
 
