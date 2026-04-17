@@ -1,0 +1,21 @@
+
+  esplor kiosk - WPE WebKit on Wayland/DRM
+
+  Browser (cogctl --system help for full list)
+    cogctl --system reload          reload current page
+    cogctl --system open <url>      navigate to new URL
+    cogctl --system ping            check whether cog is running
+    systemctl restart cog           full browser restart
+    journalctl -u cog -f            follow browser log
+
+  Display
+    display on                      wake display (CEC + DDC/CI)
+    display standby                 low-power standby
+    display off                     full soft-off
+    display status                  show current DDC power mode
+
+  System
+    systemctl list-timers           active timers (cog-watchdog, etc.)
+    journalctl -k --since -5min     recent kernel messages
+    top -b -n 1 | head -n 6         quick resource snapshot
+
